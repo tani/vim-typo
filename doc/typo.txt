@@ -9,7 +9,7 @@ Installation ~
                                                           *typo-installation*
 
 To install vim-typo, follow the standard procedure for installing Vim plugins.
-Here is an example using [vim-jetpack](https://github.com/tani/vim-jetpack):
+Here is an example using vim-jetpack |https://github.com/tani/vim-jetpack|:
 
 >
  Jetpack 'tani/vim-typo'
