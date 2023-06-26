@@ -23,7 +23,7 @@ No configuration is required.
 
 To disable the autocorrection, set the buffer local variable:
 
- autocmd FileTypoe typescript b:typo_did_setup = 1
+ autocmd FileTypoe typescript let b:typo_did_setup = 1
 
 =head2 Algorithm Overview
 
