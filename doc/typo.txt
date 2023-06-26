@@ -1,0 +1,50 @@
+typo.txt                                Auto-correction plugin for Vim/Neovim
+=============================================================================
+vim-typo~
+
+Vim-typo is an auto-correction plugin for Vim/Neovim that relies
+on a syntax file to provide intelligent corrections while typing.
+
+Installation ~
+                                                          *typo-installation*
+
+To install vim-typo, follow the standard procedure for installing Vim plugins.
+Here is an example using [vim-jetpack](https://github.com/tani/vim-jetpack):
+
+>
+ Jetpack 'tani/vim-typo'
+
+<
+
+Configuration ~
+                                                         *typo-configuration*
+
+`b:typo_did_setup` is a buffer local variable that is set to 1,
+when the autocorrection is enabled. if you want to prevent the autocorrection
+from being enabled for a specific file type, you can set this variable to 1.
+                                                       *typo-b:typo_did_setup*
+
+>
+ autocmd FileTypoe typescript let b:typo_did_setup = 1
+
+<
+
+Algorithm Overview ~
+                                                             *typo-algorithm*
+
+The auto-correction algorithm used in vim-typo involves two main operations:
+completion and swapping. Typos in words, excluding the first and last letters,
+are corrected. The algorithm focuses specifically on correcting typos in words
+that are at least 6 characters long.
+
+During typing, vim-typo dynamically retrieves the word source
+from the syntax file, enabling on-the-fly autocorrections.
+
+License ~
+                                                               *typo-license*
+
+This plugin is released under the MIT License.
+(c) 2023 Masaya Taniguchi
+
+
+vim:tw=78:ts=8:noet:ft=help:norl:
