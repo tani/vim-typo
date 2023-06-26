@@ -3,12 +3,12 @@ if exists('g:loaded_typo')
 endif
 let g:loaded_typo = 1
 
-function! s:exchange(str, i) abort
-  return a:str[:a:i] . a:str[a:i+2] . a:str[a:i+1] . a:str[a:i+3:]
+function! s:exchange(word, i) abort
+  return a:word[:a:i] . a:word[a:i+2] . a:word[a:i+1] . a:word[a:i+3:]
 endfunction
 
-function! s:delete(str, i) abort
-  return a:str[:a:i] . a:str[a:i+2:]
+function! s:delete(word, i) abort
+  return a:word[:a:i] . a:word[a:i+2:]
 endfunction
 
 function! s:generateTypos(origString, maxDistance, currString = a:origString, currDistance = 0, typos = {}) abort
@@ -39,16 +39,15 @@ function! s:generateTypos(origString, maxDistance, currString = a:origString, cu
   return typos
 endfunction
 
-
-function! s:typo(str, level) abort
-  if len(a:str) < 3
+function! s:typo(word, level) abort
+  if len(a:word) < 3
     throw "too short string"
   endif
 
-  let typos = s:generateTypos(a:str, a:level)
+  let typos = s:generateTypos(a:word, a:level)
 
   for typo in keys(typos)
-    if typo != a:str
+    if typo != a:word
       execute "iabbrev" "<buffer>" typo typos[typo]
     endif
   endfor
@@ -61,7 +60,7 @@ function! s:typo_setup() abort
 
     for word in words
       if !has_key(cache, word) && len(word) >= 6
-        call s:typo(word, 1)
+        call timer_start(0, function({ w -> s:typo(w, 1) }, [word]))
       endif
       let cache[word] = 1
     endfor
@@ -72,5 +71,5 @@ endfunction
 
 augroup Typo
   autocmd!
-  autocmd InsertEnter * nested call <SID>typo_setup()
+  autocmd InsertEnter * call <SID>typo_setup()
 augroup END
