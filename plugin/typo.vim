@@ -4,11 +4,11 @@ endif
 let g:loaded_typo = 1
 
 function! s:exchange(str, i, j) abort
-  return str[:i-1] . str[j-1] . str[i:j-2] . str[i-1] . str[j:]
+  return a:str[:a:i-1] . a:str[a:j-1] . a:str[a:i:a:j-2] . a:str[a:i-1] . a:str[a:j:]
 endfunction
 
 function! s:delete(str, i) abort
-  return str[:i-1] . str[i+1:]
+  return a:str[:a:i-1] . a:str[a:i+1:]
 endfunction
 
 function! s:generateTypos(origString, maxDistance, currString = a:origString, currDistance = 0, typos = {}) abort
@@ -50,16 +50,16 @@ function! s:typo(str, level) abort
     throw "too short string"
   endif
 
-  let hd = str[:1]
-  let md = str[1:-2]
-  let tl = str[-1:]
+  let hd = a:str[:1]
+  let md = a:str[1:-2]
+  let tl = a:str[-1:]
 
   let typos = s:generateTypos(md, a:level)
 
   for md in keys(typos)
     let abbrev = hd . md . tl
-    if abbrev != str
-      call s:async_cmd("iabbrev <buffer> " . abbrev . " " . str)
+    if abbrev != a:str
+      call s:async_cmd("iabbrev <buffer> " . abbrev . " " . a:str)
     endif
   endfor
 endfunction
