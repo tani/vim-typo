@@ -3,80 +3,71 @@ if exists('g:loaded_typo')
 endif
 let g:loaded_typo = 1
 
-function! s:exchange(str, i, j) abort
-  return a:str[:a:i-1] . a:str[a:j-1] . a:str[a:i:a:j-2] . a:str[a:i-1] . a:str[a:j:]
+function! s:exchange(str, i) abort
+  return a:str[:a:i] . a:str[a:i+2] . a:str[a:i+1] . a:str[a:i+3:]
 endfunction
 
 function! s:delete(str, i) abort
-  return a:str[:a:i-1] . a:str[a:i+1:]
+  return a:str[:a:i] . a:str[a:i+2:]
 endfunction
 
 function! s:generateTypos(origString, maxDistance, currString = a:origString, currDistance = 0, typos = {}) abort
-  let currString = a:currString
-  let currDistance = a:currDistance
   let typos = a:typos
 
-  if has_key(typos, currString)
+  if has_key(typos, a:currString)
     return typos
   endif
 
-  let typos[currString] = a:origString
+  let typos[a:currString] = a:origString
 
-  if currDistance == a:maxDistance
+  if a:currDistance == a:maxDistance
     return typos
   endif
 
-  for i in range(1, len(currString) - 1)
-    let newString = s:exchange(currString, i, i + 1)
-    let newDistance = currDistance + 1
+  for i in range(0, len(a:currString) - 4)
+    let newString = s:exchange(a:currString, i)
+    let newDistance = a:currDistance + 1
     let typos = s:generateTypos(a:origString, a:maxDistance, newString, newDistance, typos)
   endfor
 
-  for i in range(1, len(currString))
-    let newString = s:delete(currString, i)
-    let newDistance = currDistance + 1
+  for i in range(0, len(a:currString) - 3)
+    let newString = s:delete(a:currString, i)
+    let newDistance = a:currDistance + 1
     let typos = s:generateTypos(a:origString, a:maxDistance, newString, newDistance, typos)
   endfor
 
   return typos
 endfunction
 
-function! s:async_cmd(cmd) abort
-  call timer_start(0, { -> execute(a:cmd) })
-endfunction
 
 function! s:typo(str, level) abort
   if len(a:str) < 3
     throw "too short string"
   endif
 
-  let hd = a:str[:1]
-  let md = a:str[1:-2]
-  let tl = a:str[-1:]
+  let typos = s:generateTypos(a:str, a:level)
 
-  let typos = s:generateTypos(md, a:level)
-
-  for md in keys(typos)
-    let abbrev = hd . md . tl
-    if abbrev != a:str
-      call s:async_cmd("iabbrev <buffer> " . abbrev . " " . a:str)
+  for typo in keys(typos)
+    if typo != a:str
+      execute "iabbrev" "<buffer>" typo typos[typo]
     endif
   endfor
 endfunction
 
 function! s:typo_setup() abort
-  if !getbufvar(bufnr(), 'typo_activated', 0)
+  if !get(b:, 'typo_did_setup', 0)
     let words = syntaxcomplete#OmniSyntaxList()
+    let cache = {}
 
     for word in words
-      if len(word) >= 6
-        let level = len(word) >= 12 ? 2 : 1
-        call s:typo(word, level)
+      if !has_key(cache, word) && len(word) >= 6
+        call s:typo(word, 1)
       endif
+      let cache[word] = 1
     endfor
   endif
 
-  let b:typo_activated = 1
+  let b:typo_did_setup = 1
 endfunction
 
 augroup Typo
