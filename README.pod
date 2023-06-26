@@ -21,6 +21,10 @@ Here is an example using [vim-jetpack](https://github.com/tani/vim-jetpack):
 
 No configuration is required.
 
+To disable the autocorrection, set the buffer local variable:
+
+ autocmd FileTypoe typescript b:typo_did_setup = 1
+
 =head2 Algorithm Overview
 
 The auto-correction algorithm used in vim-typo involves two main operations: completion and swapping.
