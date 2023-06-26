@@ -19,7 +19,7 @@ on a syntax file to provide intelligent corrections while typing.
 =head2 Installation X<typo-installation>
 
 To install vim-typo, follow the standard procedure for installing Vim plugins.
-Here is an example using [vim-jetpack](https://github.com/tani/vim-jetpack):
+Here is an example using L<vim-jetpack|https://github.com/tani/vim-jetpack>:
 
  Jetpack 'tani/vim-typo'
 
