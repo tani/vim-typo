@@ -54,7 +54,7 @@ function! s:typo(word, level) abort
 endfunction
 
 function! s:typo_setup() abort
-  if !get(b:, 'typo_did_setup', 0)
+  if !get(b:, 'typo_did_setup', 0) || !get(b:, 'i_naver_make_typos')
     let words = syntaxcomplete#OmniSyntaxList()
     let cache = {}
 
