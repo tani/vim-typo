@@ -30,7 +30,7 @@ when the autocorrection is enabled. if you want to prevent the autocorrection
 from being enabled for a specific file type, you can set this variable to 1.
                                                        X<typo-b:typo_did_setup>
 
- autocmd FileTypoe typescript let b:typo_did_setup = 1
+ autocmd FileType typescript let b:typo_did_setup = 1
 
 =head2 Algorithm Overview X<typo-algorithm>
 
