@@ -59,7 +59,7 @@ function! s:typo_setup() abort
     let cache = {}
 
     for word in words
-      if !has_key(cache, word) && len(word) >= 6
+      if !has_key(cache, word) && len(word) >= 6 && word =~# '^[a-zA-Z]+$'
         call timer_start(0, function({ w -> s:typo(w, 1) }, [word]))
       endif
       let cache[word] = 1
