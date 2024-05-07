@@ -37,7 +37,6 @@ which is disabled by default. You can enable it by adding the following line
                                                        X<typo-tree-sitter>
 
  vim.api.nvim_create_autocmd('FileType', {
-   group = 'Vimrc',
    pattern = '*',
    callback = function(args)
      vim.bo[args.buf].syntax = 'on'
