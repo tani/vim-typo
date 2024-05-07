@@ -32,6 +32,18 @@ from being enabled for a specific file type, you can set this variable to 1.
 
  autocmd FileType typescript let b:typo_did_setup = 1
 
+To work with the tree-sitter, you need to enable the regex syntax highlighting,
+which is disabled by default. You can enable it by adding the following line
+                                                       X<typo-tree-sitter>
+
+ vim.api.nvim_create_autocmd('FileType', {
+   group = 'Vimrc',
+   pattern = '*',
+   callback = function(args)
+     vim.bo[args.buf].syntax = 'on'
+   end,
+ })
+
 =head2 Algorithm Overview X<typo-algorithm>
 
 The auto-correction algorithm used in vim-typo involves two main operations:
